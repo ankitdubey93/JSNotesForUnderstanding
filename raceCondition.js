@@ -75,3 +75,21 @@ Promise.all([transaction1,transaction1]).then(() => {
     console.log(`FINAL BALANCE (Actual): $${accountBalance}`);
     console.log(`FINAL BALANCE (expected): $50`); // 200-100-50 = 50
 });
+
+
+/*
+When we run the code, the output will typically look like :
+1. T1 Reads: reads the balance as $200.
+2. T2 Reads: T2 reads the balance as $200 (before T1 can write its result.)
+3. T1 Writes: After its 50ms delay, T1 writes 200 - 100 = $100
+4. T2 Write: After its 50ms delay, T2 writes 200 - 50 = 150
+
+The final balance is $150, demonstrating the lost balance where the $100 withdrawal (T1's work) 
+was completely overwritten by the second transation (T2)
+
+The simulation clearly illustrates how access to a shared, mutable state (accountBalance)
+without proper synchronization can lead to incorrect, non-deterministic results.
+
+*/
+
+
